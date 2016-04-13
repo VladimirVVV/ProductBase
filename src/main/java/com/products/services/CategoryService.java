@@ -11,4 +11,10 @@ public interface CategoryService {
     void create(Category category);
 
     List<Category> list();
+
+    void update(Category category);
+
+    Category getById(Long id);
+
+    void delete(Category category);
 }

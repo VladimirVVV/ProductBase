@@ -28,4 +28,20 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryDAO.findAll();
     }
 
+    @Override
+    public void update(Category category) {
+        categoryDAO.update(category);
+    }
+
+    @Override
+    public Category getById(Long id) {
+        return categoryDAO.findById(id);
+    }
+
+    @Override
+    public void delete(Category category) {
+        categoryDAO.delete(category);
+    }
+
+
 }

@@ -12,26 +12,21 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Created by vladimir on 11.04.2016.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration(classes = {ServiceTestConfig.class})
-//@ComponentScan(basePackages = {"com.products.services.impl", "com.products.dao.impl"})
 @ContextConfiguration(locations = {"classpath:META-INF/spring/test_app_context.xml"})
-@TransactionConfiguration(defaultRollback=true,transactionManager="txManager")
-//@ActiveProfiles("testProfile")
+@TransactionConfiguration(defaultRollback = true, transactionManager = "txManager")
 public class CategoryServiceImplTest {
     @Autowired
     private CategoryService categoryService;
 
     @Test
     public void testCreate() {
-        Category category = new Category();
-        category.setName("Monitor");
-        category.setDescription("Computer display");
-
+        Category category = createCategory("Monitor", "Computer display");
 
         List<Category> lst = categoryService.list();
         categoryService.create(category);
@@ -40,22 +35,60 @@ public class CategoryServiceImplTest {
         assertEquals(lst.size() + 1, lst2.size());
     }
 
+    private Category createCategory(String name, String description) {
+        Category category = new Category();
+        category.setName(name);
+        category.setDescription(description);
+        return category;
+    }
+
     @Test
-    public void testList () {
+    public void testList() {
         List<Category> lst2 = categoryService.list();
         int lstSize = lst2.size();
 
-        Category category = new Category();
-        category.setName("Monitor");
-        category.setDescription("Computer display");
-
-        Category category2 = new Category();
-        category2.setName("Monitor2");
-        category2.setDescription("Computer display");
+        Category category = createCategory("Monitor", "Computer display");
+        Category category2 = createCategory("Monitor2", "Computer display");
 
         categoryService.create(category);
         categoryService.create(category2);
 
         assertEquals(lstSize + 2, categoryService.list().size());
+    }
+
+    @Test
+    public  void testUpdate() {
+        String newName = "Mobile phone";
+        String newDescr = "Mobile phones";
+
+        Category category = createCategory("Cell phone", "Cellular phone");
+        categoryService.create(category);
+        Long id = category.getId();
+
+        category.setName(newName);
+        category.setDescription(newDescr);
+
+        categoryService.update(category);
+        Category category2 = categoryService.getById(category.getId());
+        assertEquals(newName, category2.getName());
+        assertEquals(newDescr, category2.getDescription());
+    }
+
+    @Test
+    public void testDelete() {
+        Category categories[] = {createCategory("Monitor1", "Computer display"),
+            createCategory("Monitor2", "Computer display"),
+            createCategory("Monitor3", "Computer display"),
+            createCategory("Monitor4", "Computer display"),
+            createCategory("Monitor5", "Computer display")};
+
+        for(Category category :categories) {
+            categoryService.create(category);
+        }
+
+        categoryService.delete(categories[0]);
+        Category cat1 = categoryService.getById(categories[0].getId());
+
+        assertNull(cat1);
     }
 }
