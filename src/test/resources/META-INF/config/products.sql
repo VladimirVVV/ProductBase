@@ -1,0 +1,27 @@
+-- DROP DATABASE IF EXISTS products;
+-- CREATE DATABASE products;
+-- USE products;
+DROP TABLE IF EXISTS `category`;
+
+CREATE TABLE `category` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `descr` VARCHAR(255),
+  `name` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+
+DROP TABLE IF EXISTS `product`;
+
+CREATE TABLE `product` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `dt_adding` DATETIME NOT NULL,
+  `descr` VARCHAR(255) DEFAULT NULL,
+  `manuf_name` VARCHAR(255) DEFAULT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `photo` TINYBLOB,
+  `price` BIGINT(20) NOT NULL,
+  `cat_id` BIGINT(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `FKED8DCCEFC5FE7204` FOREIGN KEY (`cat_id`) REFERENCES `category` (`id`)
+);
