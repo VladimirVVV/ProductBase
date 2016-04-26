@@ -12,6 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class ProductsController {
     final Logger logger = LoggerFactory.getLogger(ProductsController.class);
+//
+    @RequestMapping("/")
+    public String redirectToProducts() {
+        System.out.println("fhgfgvhfgh");
+        return "redirect:/products";
+    }
 
     @RequestMapping("/products")
     public String showProducts(Model model) {
@@ -20,4 +26,6 @@ public class ProductsController {
 
         return "products";
     }
+
+
 }
